@@ -1,0 +1,318 @@
+\documentclass[titlepage]{article}
+
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{makecell}
+\usepackage{cancel}
+\usepackage{geometry}
+
+\newgeometry{left=2cm,bottom=2cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue, 
+    filecolor=magenta,
+    urlcolor=blue
+}
+
+\setcounter{secnumdepth}{0}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rfoot{\thepage \hspace{1pt} of \pageref{LastPage}}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \Huge
+        \vspace*{3cm}
+        \textbf{ \quad Satellite Communication\\ \quad \quad Assignment 1} \\
+        \qquad EEE F472\\[5ex]
+        \quad\includegraphics[scale=0.75]{BITS_Pilani-Logo.png}
+        \vfill
+        \huge
+        \qquad Sai Kartik (2020A3PS0435P)\\\qquad Rajeev Rajagopal (2020A3PS1237P)
+    \end{center}
+\end{titlepage}
+
+\pagenumbering{roman}
+
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section {Problem 1}
+
+\begin{tcolorbox}
+    Prove that the coverage area shown in the figure is given by
+    $$\mathcal{A}_{cov} = 2\pi r_E^2(1-\cos \phi_E)$$
+    where $\phi_E = \cos ^{-1} \left(\frac{r_E}{r_E+h}\cos \phi_{\ell}\right)-\phi_{\ell}$
+    \begin{center}
+        \includegraphics[scale=0.5]{problem1.png}
+    \end{center}
+\end{tcolorbox}
+
+\subsection{Solution}
+
+The above figure can be equivalently represented as shown below.
+\begin{center}
+    \begin{figure}[ht]
+        \centering
+        \label{fig:problem1}
+        \includegraphics[scale=0.5]{problem1sol.png}
+        \caption{Equivalent representation of the figure}
+    \end{figure}
+\end{center}
+
+Applying the sine rule on the triangle $\triangle ABC$ we get,
+\begin{align}
+    \frac{\sin(90-(\phi_E-\phi_{\ell}))}{r_E}     & = \frac{\sin(90+\phi_{\ell})}{r_E+h}  \label{eq1} \\
+    \implies \frac{\cos(\phi_E-\phi_{\ell})}{r_E} & = \frac{\cos(\phi_{\ell})}{r_E+h} \label{eq2}
+\end{align}
+
+\noindent From equation \ref{eq2} we get,
+\begin{align}
+    \phi_E = \cos ^{-1} \left(\frac{r_E}{r_E+h}\cos \phi_{\ell}\right)-\phi_{\ell} \label{eq3}
+\end{align}
+
+\noindent To finally find the coverage area, We find the cap area subtended by the solid angle $\Omega$ whose \\corresponding planar angle is $\phi_E$.\\
+It is known that:
+\begin{align}
+    \Omega = \frac{A}{r^2} \label{eq4}
+\end{align}
+Where, for the solid angle $\Omega$, $A$ is the cap area (coverage area in our case) and $r$ is the radius of the sphere. We also know the conversion between the said solid angle and the plane angle:
+
+\begin{align}
+    \Omega = 2\pi (1-\cos\phi_E) \label{eq5}
+\end{align}
+
+\noindent Here, the radius of the sphere is the radius of the earth, hence we have:
+\begin{align}
+    \boxed{\mathcal{A}_{cov} = \Omega r_E^2 = 2\pi r_E^2(1-\cos\phi_E)} \label{eq6}
+\end{align}
+where $\phi_E$ is given by equation \ref{eq3}.
+
+\newpage
+
+\section {Problem 2}
+
+\begin{tcolorbox}
+    \begin{itemize}
+        \item Show that the slant range is given by $$z = \sqrt{(r_E\sin \phi_{\ell})^2+2r_Eh+h^2}-r_E\sin\phi_{\ell}$$
+              \begin{list}{$\bullet$}
+                  \item verify that $z<r_E+h$
+              \end{list}
+        \item Suppose the minimum angle of elevation is $5^{\circ}$ and the carrier frequency is 6GHz. Compute the slant range(in km) and path loss (in dB). Assume $r_E = 6370 $ km and orbit radius 42242 km.
+    \end{itemize}
+\end{tcolorbox}
+
+\subsection{Solution}
+
+\begin{itemize}
+    \item In reference to figure \ref*{fig:problem1} we can use the cosine rule on $\triangle ABC$. Assuming the length $AB = z$:
+          \begin{align}
+              (r_E+h)^2                             & = z^2+r_E^2-2zr_E\cos(90+\phi_{\ell}) \ \nonumber       \\
+              \implies \cancel{r_E^2} + 2r_Eh + h^2 & = z^2 + 2zr_E\sin\phi_{\ell} + \cancel{r_E^2} \nonumber \\
+              \implies z^2 +2zr_E\sin\phi_{\ell}    & -(h^2+2r_Eh)     = 0 \label{eq7}
+          \end{align}
+          Solving the quadriatic equation in \ref{eq7} we get:
+          \begin{align}
+              \boxed{z = \sqrt{(r_E\sin \phi_{\ell})^2+2r_Eh+h^2}-r_E\sin\phi_{\ell}} \label{eq8}
+          \end{align}
+    \item In  a triangle, since sum of 2 sides must be more than the third side, we have:
+          \begin{align}
+              z & < r_E+h + r_E  \label{eq9}
+          \end{align}
+          Clearly, $z<2r_E+h \implies \boxed{z<r_E+h}$
+
+    \item Given that $\phi_{\ell} = 5 ^{\circ}$, we can find $z$ from equation \ref{eq8}. The orbit radius is given as $42242$ km. Hence $h = 42242-6370 = 35872$ km.
+          \begin{align}
+              z & = \sqrt{(r_E\sin 5^{\circ})^2+2r_Eh+h^2}-r_E\sin 5^{\circ}  \nonumber                 \\
+                & = \sqrt{(6370\sin 5^{\circ})^2+2(6370)(35872)+(35872)^2}-6370\sin 5^{\circ} \nonumber \\
+                & = 41207.455 \text{ km} \label{eq10}
+          \end{align}
+          The path loss is given by:
+          \begin{align}
+              \text{FSPL} = \left(\frac{4\pi d f}{c}\right)^2 \label{eq11}
+          \end{align}
+          Where $d$ is the slant range, $f$ is the carrier frequency and $c$ is the speed of light.\\
+          Substituting the value of $z$ from equation \ref{eq10} we get:
+          \begin{align}
+              \text{FSPL} & = \left(\frac{4\pi\times 41207.455\times10^3\times 6 \times 10^6}{3\times 10^8 }\right)^2 \nonumber \\
+                          & = 1.0726 \times 10^{14}
+          \end{align}
+          In decibels:
+          \begin{align}
+              \text{FSPL (dB)} & = 10\log_{10} \left(\frac{4\pi\times 41207.455\times10^3\times 6 \times 10^6}{3\times 10^8 }\right)^2 \nonumber \\
+                               & = 140.304 \text{ dB}
+          \end{align}
+
+\end{itemize}
+
+\newpage
+
+\section {Problem 3a}
+
+\begin{tcolorbox}
+    Complete the EIRP budget table. (Note: Rounding off the final value to one decimal place)
+    \begin{center}
+        \begin{tabular}{||c | c | c | c||}
+            \hline
+            Region          & 1        & 2        & 3        \\[0.5ex]
+            \hline\hline
+            HPA Output      & 13.6 dbW & 13.6 dbW & 13.6 dbW \\[0.5ex]
+            \hline
+            \makecell{Losses between                         \\ HPA \& antenna} & 1.8 dB & 0.9 dB & 0.6 dB \\[0.5ex]
+            \hline
+            \makecell{Antenna gain including                 \\ pointing error losses, etc.} & 31.5 dB & 27.5 dB & 25.5 dB \\[0.5ex]
+            \hline
+            Min. EIRP (dbW) & ?        & ?        & ?        \\[0.5ex]
+            \hline
+        \end{tabular}
+    \end{center}
+\end{tcolorbox}
+
+\subsection{Solution}
+\subsubsection*{Region 1}
+\begin{align}
+    \text{Min. EIRP} & = \text{HPA Output} + \text{Antenna Gain} - \text{Losses} \nonumber \\
+                     & = 13.6 + 31.5 - 1.8 \nonumber                                       \\
+                     & = 43.3 \text{ dBW} \nonumber
+\end{align}
+
+\subsubsection*{Region 2}
+\begin{align}
+    \text{Min. EIRP} & = 13.6 + 27.5 - 0.9 \nonumber \\
+                     & = 40.2 \text{ dBW} \nonumber
+\end{align}
+
+\subsubsection*{Region 3}
+\begin{align}
+    \text{Min. EIRP} & = 13.6 + 25.5 - 0.6 \nonumber \\
+                     & = 38.5 \text{ dBW} \nonumber
+\end{align}
+\subsubsection{Final budget table}
+\begin{center}
+    \begin{tabular}{||c | c | c | c||}
+        \hline
+        Region          & 1        & 2        & 3        \\[0.5ex]
+        \hline\hline
+        HPA Output      & 13.6 dbW & 13.6 dbW & 13.6 dbW \\[0.5ex]
+        \hline
+        \makecell{Losses between                         \\ HPA \& antenna} & 1.8 dB & 0.9 dB & 0.6 dB \\[0.5ex]
+        \hline
+        \makecell{Antenna gain including                 \\ pointing error losses, etc.} & 31.5 dB & 27.5 dB & 25.5 dB \\[0.5ex]
+        \hline
+        Min. EIRP (dbW) & 43.3 dbW & 40.2 dbW & 38.5 dbW \\[0.5ex]
+        \hline
+    \end{tabular}
+\end{center}
+
+\newpage
+
+\section {Problem 3b}
+
+\begin{tcolorbox}
+    Complete the $\frac{G}{T_e}$ budget table. (Note: Rounding off the final value to one decimal place)
+    \begin{center}
+        \begin{tabular}{||c | c | c | c||}
+            \hline
+            Region                      & 1       & 2       & 3       \\[0.5ex]
+            \hline\hline
+            Minimum antenna gain        & 31.5 db & 27.5 db & 25.5 db \\[0.5ex]
+            \hline
+            \makecell{Transmission Losses between                     \\ Antenna \& preamp} & 1 dB & 0.5 dB & 1.5 dB \\[0.5ex]
+            \hline
+            \makecell{System noise temperature                        \\ at preamp input} & 800 K & 900 K & 750 K \\[0.5ex]
+            \hline
+            Min. $\frac{G}{T_e}$ (db/K) & ?       & ?       & ?       \\[0.5ex]
+            \hline
+        \end{tabular}
+    \end{center}
+\end{tcolorbox}
+
+\subsection{Solution}
+\subsubsection*{Region 1}
+Minimum antenna gain after accounting for losses = (31.5-1) dB = 30.5 dB \\
+Gain in the linear scale = $10^{30.5/10} = 1122.0185$ \\
+System noise temperature = 800 K \\
+Gain to noise temperature ratio (linear scale) = $1122.0185/800 = 1.4025$ \\
+Gain to noise temperature ratio (dB scale) = $10\log_{10} 1.4025 = 1.4691 \approx 1.5$ dB/K
+\subsubsection*{Region 2}
+Minimum antenna gain after accounting for losses = (27.5-0.5) dB = 27 dB \\
+Gain in the linear scale = $10^{27/10} = 501.1872$ \\
+System noise temperature = 900 K \\
+Gain to noise temperature ratio (linear scale) = $501.1872/900 = 0.5569$ \\
+Gain to noise temperature ratio (dB scale) = $10\log_{10} 0.5569 = -2.5424\approx -2.5$ dB/K
+\subsubsection*{Region 3}
+Minimum antenna gain after accounting for losses = (25.5-1.5) dB = 24 dB \\
+Gain in the linear scale = $10^{24/10} = 251.1886$ \\
+System noise temperature = 750 K \\
+Gain to noise temperature ratio (linear scale) = $251.1886/750 = 0.3349$ \\
+Gain to noise temperature ratio (dB scale) = $10\log_{10} 0.3349 = -4.7506 \approx -4.8$ dB/K
+\subsubsection{Final budget table}
+\begin{center}
+    \begin{tabular}{||c | c | c | c||}
+        \hline
+        Region                      & 1        & 2         & 3         \\[0.5ex]
+        \hline\hline
+        Minimum antenna gain        & 31.5 db  & 27.5 db   & 25.5 db   \\[0.5ex]
+        \hline
+        \makecell{Transmission Losses between                          \\ Antenna \& preamp} & 1 dB & 0.5 dB & 1.5 dB \\[0.5ex]
+        \hline
+        \makecell{System noise temperature                             \\ at preamp input} & 800 K & 900 K & 750 K \\[0.5ex]
+        \hline
+        Min. $\frac{G}{T_e}$ (db/K) & 1.5 db/K & -2.5 db/K & -4.8 db/K \\[0.5ex]
+        \hline
+    \end{tabular}
+\end{center}
+
+\newpage
+
+\section {Problem 4}
+
+\begin{tcolorbox}
+    \begin{itemize}
+        \item Assume that the differences in slant height ranges neglected.
+        \item Let $D$ denote the earth station antenna diameter and let $\lambda$ denote the operating wavelength.
+        \item An optimum space $\Delta\psi = \frac{\lambda}{D}$ yeilds a transmission capacity(per units of bandwidth and angle) given by $\mathcal{C}_{tr}=\frac{2D}{\lambda}$ bps/Hz/rad (Justify).
+        \item Obtain an expression for the maximum transmission rate (bps). Note that this rate is handled by a satellite system using a bandwidth $B$ and a segment of synchronous orbit spanning $\psi$ radian.
+        \item \textbf{Numerical:} Consider a bandwidth of 500 MHz and a 30 m diameter antenna at 4 GHz. What is the theoretical global capacity? If a telephone channel requires 64 Kbps, how many channels can be served approximately?
+    \end{itemize}
+\end{tcolorbox}
+
+\subsection{Solution}
+
+\begin{itemize}
+    \item Let the maximum transmission rate be given by $\mathcal{M}_{tr}$. We can use dimensional analysis to derive the formula for $\mathcal{M}_{tr}$.
+          \begin{align}
+              \mathcal{M}_{tr}          & \propto \frac{2D}{\lambda} \times \Delta \psi \times B \cdot \frac{\text{bps}}{\text{Hz}\cdot\text{rad}} \times \text{Hz} \cdot \text{rad} \nonumber \\
+              \implies \mathcal{M}_{tr} & = k\cdot 2B \ \text{bps}
+          \end{align}
+          Where $k$ is a constant of proportionality.
+    \item Given B = 500 MHz, $\lambda = 0.075$ m, D = 30 m, $\Delta \psi = \frac{\lambda}{D} = \frac{0.075}{30} = 0.0025$ rad.
+          \begin{align}
+              \mathcal{M}_{tr}          & = k\cdot 2\times 500 \times 10^6 \ \text{bps} \nonumber \\
+              \implies \mathcal{M}_{tr} & = k \cdot 1 \times 10^9 \ \text{bps}
+          \end{align}
+          Given that a single telephone channel requires 64 Kbps, we can say that number of channels ($N$) that the satellite can serve is given by
+          \begin{equation}
+              N = k \frac{10^9}{64 \times 10^3} = k \cdot 15625 \\
+          \end{equation}
+          Assuming the value of $k$ to be 1 we have:
+            \begin{equation}
+                \boxed{N = 15625} \nonumber
+            \end{equation}
+
+\end{itemize}
+
+
+
+\end{document}
