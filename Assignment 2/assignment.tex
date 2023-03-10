@@ -1,0 +1,205 @@
+\documentclass[titlepage]{article}
+
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{makecell}
+\usepackage{cancel}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{xcolor}
+\usepackage{array,multirow}
+\usepackage{booktabs}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\newgeometry{left=2cm,bottom=2cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue, 
+    filecolor=magenta,
+    urlcolor=blue
+}
+
+\setcounter{secnumdepth}{0}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rfoot{\thepage \hspace{1pt} of \pageref{LastPage}}
+
+\definecolor{mygreen}{RGB}{28,172,0}
+\definecolor{mylilas}{RGB}{170,55,241}
+\definecolor{com}{rgb}{0,0.6,0.3}
+
+\colorlet{kw}{blue}
+
+\lstset{language=Matlab,
+    breaklines=true,
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},
+    showstringspaces=false,
+    numbers=left,
+    numberstyle={\tiny \color{black}},
+    numbersep=9pt, 
+    emph=[1]{for,end,break},emphstyle=[1]\color{blue},
+    emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \Huge
+        \vspace*{3cm}
+        \textbf{ \quad Satellite Communication\\ \quad \quad Assignment 2} \\
+        \qquad EEE F472\\[5ex]
+        \quad\includegraphics[scale=0.75]{BITS_Pilani-Logo.png}
+        \vfill
+        \huge
+        \qquad Sai Kartik\ \qquad \ \ \ (2020A3PS0435P)\\\qquad Rajeev Rajagopal (2020A3PS1237P) \\ \qquad Kshitij Merchant (2020A3PS0436P)
+    \end{center}
+\end{titlepage}
+
+\pagenumbering{roman}
+
+\tableofcontents
+\listoftables
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section {Problem 1}
+
+\begin{tcolorbox}
+    \begin{itemize}
+        \item Write the algorithm to compute position of the Friendship 7 spacecraft in the form of pseudocode (or present a flowchart)
+        \item Write a computer program (in MATLAB) to compute position of the Friendship 7 spacecraft
+    \end{itemize}
+
+\end{tcolorbox}
+\subsection{Pseudocode}
+\begin{enumerate}
+    \item Declare constants
+    \item Input date, time (precisely)
+    \item convert into fractional day with the value of time (fractional day = hh/24+mm/1440+ss/86400)
+    \item if month $<$=2, year = year -1 ; month = month + 12
+    \item Calculate Julian date with obtained params
+    \item Calculate various orbital parameters
+    \item Convert to cartesian co-ordinates from obtained angular orbital parameters. Alpha and Delta is obtained from here
+    \item Compute GST with its empirical formula
+    \item Make sure GST is in the range [0,360)
+    \item Calculate L=GST - Alpha
+    \item L = wrapTo180(L)
+    \item Print Delta and L (lat. and long.)
+\end{enumerate}
+
+\newpage
+
+\subsection{MATLAB Code}
+\lstinputlisting{MATLAB codes/f7.m}
+\newpage
+\section {Problem 2}
+
+\begin{tcolorbox}
+    \begin{itemize}
+        \item Consider a satellite non-linear power amplifier (e.g., TWTA) with the
+              following voltage transfer characteristic:
+              $$v_{out} = b_1v_{in}+b_3v_{in}^3$$
+              Where $v_{in}(t) = \cos(2\pi f_1t)+\cos(2\pi f_2t)+\cos(2\pi f_3t)$. \\[1ex]
+              Here, $f_1 = 3.8$GHz, $f_2 = 3.95$GHz, and $f_3 = 4.05$GHz.
+        \item Assume that the satellite transponder bandwidth is from $f_{\ell} = 3.7$GHz to $f_u = 4.2$GHz
+        \item Determine the amplitude and location of all intermodulation (IM) products within the transponder bandwidth resulting from the power amplifier action on the input signal $v_{in}$. \textbf{Note: }Present your final answers in the form of a table
+    \end{itemize}
+
+\end{tcolorbox}
+
+\subsection{Solution}
+Given
+\begin{equation}
+    v_{out} = b_1v_{in}+b_3v_{in}^3
+\end{equation}
+We have:
+\begin{equation}
+    v_{in} = \cos(\omega_1t)+\cos(\omega_2t)+\cos(\omega_3t) \ \ \text{where} \ \ \omega_1 = 2\pi f_1, \ \ \omega_2 = 2\pi f_2, \ \ \omega_3 = 2\pi f_3
+\end{equation}
+We know that:
+\begin{equation}
+    \label{eq:3}
+    (a+b+c)^3 = a^3+3a^2b+3a^2c+6abc+3ac^2+b^3+3b^2c+3bc^2+c^3
+\end{equation}
+Using \ref{eq:3} we have $v_{in}^3$ to be:
+\begin{align}
+    \label{eq:4}
+    \begin{split}
+        v_{in}^3 & = \cos^3(\omega_1t)+3\cos^2(\omega_1t)\cos(\omega_2t)+3\cos^2(\omega_1t)\cos(\omega_3t)             \\
+        & +6\cos(\omega_1t)\cos(\omega_2t)\cos(\omega_3t)+3\cos(\omega_1t)\cos^2(\omega_3t)+\cos^3(\omega_2t) \\
+        & +3\cos^2(\omega_2t)\cos(\omega_3t)+3\cos(\omega_2t)\cos^2(\omega_3t)+\cos^3(\omega_3t)
+    \end{split}
+\end{align}
+Applying the trigonometric identities given below:
+\begin{align}
+    \cos^3x & = \frac{\cos(3x)+3\cos x}{4} \\
+    \cos^2x & = \frac{\cos(2x)+1}{2}
+\end{align}
+We can simplify \ref{eq:4} as follows
+\begin{align}
+    \begin{split}
+        v_{in}^3 &= \frac{\cos(3\omega_1t)+3\cos(\omega_1t)}{4} + \frac{\cos(3\omega_2t)+3\cos(\omega_2t)}{4}+\frac{\cos(3\omega_3t)+3\cos(\omega_3t)}{4} \\
+        & + \frac{3\cos(\omega_1t)\cos(\omega_2t)+3\cos(\omega_1t)\cos(\omega_3t)+3\cos(\omega_2t)\cos(\omega_3t)}{2} \\
+        & + \frac{3\cos(\omega_1t)\cos(\omega_2t)\cos(\omega_3t)}{4}
+    \end{split}
+\end{align}
+\newpage
+Simplifying further, we arrive at:
+\begin{align}
+    \begin{split}
+        v_{in}^3 &= \frac 14 \left(\cos(3\omega_1t)+\cos(3\omega_2t)+\cos(3\omega_3t)\right) \\
+        & + \frac 34 \big[\cos\{(2\omega_1+\omega_2)t\}+\cos\{(2\omega_1-\omega_2)t\}\\&\ \quad + \cos\{(2\omega_1+\omega_3)t\}+ \cos\{(2\omega_1-\omega_3)t\}\\&\ \quad + \cos\{(2\omega_2+\omega_1)t\}+ \cos\{(2\omega_2-\omega_1)t\}\\&\ \quad + \cos\{(2\omega_2+\omega_3)t\}+ \cos\{(2\omega_2-\omega_3)t\}\\&\ \quad + \cos\{(2\omega_3+\omega_1)t\}+ \cos\{(2\omega_3-\omega_1)t\}\\&\ \quad + \cos\{(2\omega_3+\omega_2)t\}+ \cos\{(2\omega_3-\omega_2)t\}  \big] \\
+        & + \frac 32 \big[\cos\{(\omega_1+\omega_2+\omega_3)t\}+\cos\{(\omega_1+\omega_2-\omega_3)t\}\\&\ \quad  +\cos\{(\omega_1-\omega_2+\omega_3)t\}+\cos\{(\omega_1-\omega_2-\omega_3)t\}\big] \\
+        & + \frac {15}{4} \big[\cos(\omega_1t)+\cos(\omega_2t)+\cos(\omega_3t)\big]
+    \end{split}
+\end{align}
+Hence the final value of $v_{IM}$ is (accounting only for frequencies in the range $f_{\ell} = 3.7$GHz to $f_u = 4.2$GHz):
+\begin{align}
+    \begin{split}
+        v_{IM} &= \left(b_1+\frac{15}{4}b_3\right)\left(\cos(\omega_1t)+\cos(\omega_2t)+\cos(\omega_3t)\right) \\
+        & + \frac 34 b_3 \left[\cos(\{2\omega_2-\omega_1\}t)+\cos(\{2\omega_2-\omega_3\}t)+\cos(\{2\omega_3-\omega_2\}t)\right] \\
+        & + \frac 32 b_3 \left[\cos\{(\omega_1+\omega_2-\omega_3)t\}+\cos\{(\omega_1-\omega_2+\omega_3)t\}+\cos\{(\omega_1-\omega_2-\omega_3)t\}\right]
+    \end{split}
+\end{align}
+Presenting the frequencies received in a tabular format:
+\begin{center}
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|l|l|l|}
+            \hline
+            Amplitude                              & Location      & Frequency \\
+            \hline
+            \multirow{3}{*}{$b_1+\frac{15}{4}b_3$} & $f_1$         & 3.8GHz    \\\cline{2-3}
+                                                   & $f_2$         & 3.95GHz   \\\cline{2-3}
+                                                   & $f_3$         & 4.05GHz   \\
+            \hline
+            \multirow{3}{*}{$\frac 34 b_3$ }       & $2f_2-f_1$    & 4.1GHz    \\\cline{2-3}
+                                                   & $2f_2-f_3$    & 3.85GHz   \\\cline{2-3}
+                                                   & $2f_3-f_2$    & 4.15GHz   \\
+            \hline
+            \multirow{3}{*}{$\frac 32 b_3$ }       & $f_1+f_2-f_3$ & 3.7GHz    \\\cline{2-3}
+                                                   & $f_1-f_2+f_3$ & 3.9GHz    \\\cline{2-3}
+                                                   & $f_1-f_2-f_3$ & 4.2GHz    \\
+            \hline
+        \end{tabular}
+        \caption{IM frequencies}
+    \end{table}
+\end{center}
+
+\end{document}
